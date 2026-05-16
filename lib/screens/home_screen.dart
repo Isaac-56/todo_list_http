@@ -28,7 +28,7 @@ class _HomeScreenState extends State<HomeScreen> {
 
     return Scaffold(
       appBar: AppBar(
-        title: const Text('To-Do CRUD (HTTP + Provider)'),
+        title: const Text('To-Do'),
         backgroundColor: Colors.blue,
         foregroundColor: Colors.white,
       ),

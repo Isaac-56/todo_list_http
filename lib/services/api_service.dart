@@ -3,13 +3,15 @@ import 'dart:convert';
 import '../models/todo.dart';
 
 class ApiService {
-  static const String baseUrl = 'https://jsonplaceholder.typicode.com/todos';
+  static const String baseUrl = 'https://dummyjson.com/todos';
 
   Future<List<Todo>> getTodos() async {
     final response = await http.get(Uri.parse(baseUrl));
     if (response.statusCode == 200) {
-      List<dynamic> data = json.decode(response.body);
-      return data.map((json) => Todo.fromJson(json)).toList();
+      final Map<String, dynamic> data = json.decode(response.body);
+      List<dynamic> todos = data['todos'];
+      List<Todo> allTodos = todos.map((json) => Todo.fromJson(json)).toList();
+      return allTodos.take(5).toList();
     } else {
       throw Exception('Failed to load todos');
     }
@@ -26,11 +28,11 @@ class ApiService {
 
   Future<Todo> createTodo(Todo todo) async {
     final response = await http.post(
-      Uri.parse(baseUrl),
+      Uri.parse('$baseUrl/add'),
       headers: {'Content-Type': 'application/json'},
       body: json.encode(todo.toJson()),
     );
-    if (response.statusCode == 201) {
+    if (response.statusCode == 201 || response.statusCode == 200) {
       return Todo.fromJson(json.decode(response.body));
     } else {
       throw Exception('Failed to create todo');
@@ -52,7 +54,9 @@ class ApiService {
 
   Future<void> deleteTodo(int id) async {
     final response = await http.delete(Uri.parse('$baseUrl/$id'));
-    if (response.statusCode != 200) {
+    if (response.statusCode == 200) {
+      return;
+    } else {
       throw Exception('Failed to delete todo');
     }
   }

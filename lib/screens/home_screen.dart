@@ -33,7 +33,6 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
-            if (todoProvider.isLoading) const LinearProgressIndicator(),
             if (todoProvider.message.isNotEmpty)
               Container(
                 padding: const EdgeInsets.all(8),

@@ -18,7 +18,7 @@ class _HomeScreenState extends State<HomeScreen> {
   final TextEditingController _deleteIdController = TextEditingController();
   bool _completed = false;
   bool _updateCompleted = false;
-  // userId removed – we'll always use 1
+
   @override
   Widget build(BuildContext context) {
     final todoProvider = Provider.of<TodoProvider>(context);
@@ -32,6 +32,11 @@ class _HomeScreenState extends State<HomeScreen> {
         padding: const EdgeInsets.all(16.0),
         child: Column(
           children: [
+            if (todoProvider.isLoading)
+              const Padding(
+                padding: EdgeInsets.all(8.0),
+                child: Text('Loading...'),
+              ),
             if (todoProvider.message.isNotEmpty)
               Container(
                 padding: const EdgeInsets.all(8),
@@ -157,11 +162,11 @@ class _HomeScreenState extends State<HomeScreen> {
     showDialog(
       context: context,
       builder: (ctx) {
-        return AlertDialog(
-          title: const Text('Create New Todo'),
-          content: StatefulBuilder(
-            builder: (context, setStateDialog) {
-              return Column(
+        return StatefulBuilder(
+          builder: (context, setStateDialog) {
+            return AlertDialog(
+              title: const Text('Create New Todo'),
+              content: Column(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   TextField(
@@ -182,29 +187,29 @@ class _HomeScreenState extends State<HomeScreen> {
                     ],
                   ),
                 ],
-              );
-            },
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx),
-              child: const Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                if (_titleController.text.isNotEmpty) {
-                  final newTodo = Todo(
-                    userId: 1,
-                    title: _titleController.text,
-                    completed: _completed,
-                  );
-                  provider.addTodo(newTodo);
-                }
-                Navigator.pop(ctx);
-              },
-              child: const Text('Create'),
-            ),
-          ],
+              ),
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(ctx),
+                  child: const Text('Cancel'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    if (_titleController.text.isNotEmpty) {
+                      final newTodo = Todo(
+                        userId: 1,
+                        title: _titleController.text,
+                        completed: _completed,
+                      );
+                      provider.addTodo(newTodo);
+                    }
+                    Navigator.pop(ctx);
+                  },
+                  child: const Text('Create'),
+                ),
+              ],
+            );
+          },
         );
       },
     );
@@ -217,56 +222,60 @@ class _HomeScreenState extends State<HomeScreen> {
     showDialog(
       context: context,
       builder: (ctx) {
-        return AlertDialog(
-          title: const Text('Update Todo'),
-          content: Column(
-            mainAxisSize: MainAxisSize.min,
-            children: [
-              TextField(
-                controller: _updateIdController,
-                keyboardType: TextInputType.number,
-                decoration: const InputDecoration(labelText: 'Todo ID'),
-              ),
-              TextField(
-                controller: _updateTitleController,
-                decoration: const InputDecoration(labelText: 'New Title'),
-              ),
-              Row(
+        return StatefulBuilder(
+          builder: (context, setStateDialog) {
+            return AlertDialog(
+              title: const Text('Update Todo'),
+              content: Column(
+                mainAxisSize: MainAxisSize.min,
                 children: [
-                  const Text('Completed: '),
-                  Checkbox(
-                    value: _updateCompleted,
-                    onChanged: (value) {
-                      setState(() {
-                        _updateCompleted = value!;
-                      });
-                    },
+                  TextField(
+                    controller: _updateIdController,
+                    keyboardType: TextInputType.number,
+                    decoration: const InputDecoration(labelText: 'Todo ID'),
+                  ),
+                  TextField(
+                    controller: _updateTitleController,
+                    decoration: const InputDecoration(labelText: 'New Title'),
+                  ),
+                  Row(
+                    children: [
+                      const Text('Completed: '),
+                      Checkbox(
+                        value: _updateCompleted,
+                        onChanged: (value) {
+                          setStateDialog(() {
+                            _updateCompleted = value!;
+                          });
+                        },
+                      ),
+                    ],
                   ),
                 ],
               ),
-            ],
-          ),
-          actions: [
-            TextButton(
-              onPressed: () => Navigator.pop(ctx),
-              child: const Text('Cancel'),
-            ),
-            ElevatedButton(
-              onPressed: () {
-                final id = int.tryParse(_updateIdController.text);
-                if (id != null && _updateTitleController.text.isNotEmpty) {
-                  final updatedTodo = Todo(
-                    userId: 1,
-                    title: _updateTitleController.text,
-                    completed: _updateCompleted,
-                  );
-                  provider.updateTodo(id, updatedTodo);
-                }
-                Navigator.pop(ctx);
-              },
-              child: const Text('Update'),
-            ),
-          ],
+              actions: [
+                TextButton(
+                  onPressed: () => Navigator.pop(ctx),
+                  child: const Text('Cancel'),
+                ),
+                ElevatedButton(
+                  onPressed: () {
+                    final id = int.tryParse(_updateIdController.text);
+                    if (id != null && _updateTitleController.text.isNotEmpty) {
+                      final updatedTodo = Todo(
+                        userId: 1,
+                        title: _updateTitleController.text,
+                        completed: _updateCompleted,
+                      );
+                      provider.updateTodo(id, updatedTodo);
+                    }
+                    Navigator.pop(ctx);
+                  },
+                  child: const Text('Update'),
+                ),
+              ],
+            );
+          },
         );
       },
     );

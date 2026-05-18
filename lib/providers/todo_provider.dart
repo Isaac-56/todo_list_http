@@ -15,19 +15,18 @@ class TodoProvider extends ChangeNotifier {
   String get message => _message;
   Todo? get singleTodo => _singleTodo;
 
-
   Future<void> fetchTodos() async {
     _setLoading(true);
     _clearMessage();
     try {
       _todos = await _apiService.getTodos();
+      _message = 'Fetched ${_todos.length} todos';
     } catch (e) {
       _message = 'Error: $e';
     } finally {
       _setLoading(false);
     }
   }
-
 
   Future<void> fetchTodoById(int id) async {
     _setLoading(true);
@@ -35,6 +34,7 @@ class TodoProvider extends ChangeNotifier {
     _singleTodo = null;
     try {
       _singleTodo = await _apiService.getTodoById(id);
+      _message = 'Fetched: ${_singleTodo!.title}';
     } catch (e) {
       _message = 'Error: $e';
     } finally {
@@ -42,46 +42,50 @@ class TodoProvider extends ChangeNotifier {
     }
   }
 
-
   Future<void> addTodo(Todo todo) async {
+    List<Todo> previousTodos = List.from(_todos);
     _setLoading(true);
     _clearMessage();
     try {
       final newTodo = await _apiService.createTodo(todo);
-      _todos.insert(0, newTodo);
-      _message = 'Created: ${newTodo.title}';
+      _todos = [newTodo, ...previousTodos].take(5).toList();
+      _message = 'Added: ${newTodo.title}';
     } catch (e) {
+      _todos = previousTodos;
       _message = 'Error: $e';
     } finally {
       _setLoading(false);
     }
   }
 
-
   Future<void> updateTodo(int id, Todo todo) async {
+    List<Todo> previousTodos = List.from(_todos);
     _setLoading(true);
     _clearMessage();
     try {
       final updated = await _apiService.updateTodo(id, todo);
-      final index = _todos.indexWhere((t) => t.id == id);
-      if (index != -1) _todos[index] = updated;
+      _todos = previousTodos.map((t) => t.id == id ? updated : t).toList();
+      if (_singleTodo?.id == id) _singleTodo = updated;
       _message = 'Updated: ${updated.title}';
     } catch (e) {
+      _todos = previousTodos;
       _message = 'Error: $e';
     } finally {
       _setLoading(false);
     }
   }
 
-
   Future<void> removeTodo(int id) async {
+    List<Todo> previousTodos = List.from(_todos);
     _setLoading(true);
     _clearMessage();
     try {
       await _apiService.deleteTodo(id);
-      _todos.removeWhere((t) => t.id == id);
+      _todos = previousTodos.where((t) => t.id != id).toList();
+      if (_singleTodo?.id == id) _singleTodo = null;
       _message = 'Deleted todo with id $id';
     } catch (e) {
+      _todos = previousTodos;
       _message = 'Error: $e';
     } finally {
       _setLoading(false);

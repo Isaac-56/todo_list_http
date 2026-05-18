@@ -42,27 +42,29 @@ class _HomeScreenState extends State<HomeScreen> {
               ),
             Expanded(
               child: Center(
-                child: Wrap(
-                  spacing: 12,
-                  runSpacing: 12,
-                  alignment: WrapAlignment.center,
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
                   children: [
                     ElevatedButton(
                       onPressed: () => todoProvider.fetchTodos(),
                       child: const Text('GET ALL'),
                     ),
+                    const SizedBox(height: 12),
                     ElevatedButton(
                       onPressed: () => _showGetSingleDialog(todoProvider),
                       child: const Text('GET SINGLE'),
                     ),
+                    const SizedBox(height: 12),
                     ElevatedButton(
                       onPressed: () => _showCreateDialog(todoProvider),
                       child: const Text('CREATE'),
                     ),
+                    const SizedBox(height: 12),
                     ElevatedButton(
                       onPressed: () => _showUpdateDialog(todoProvider),
                       child: const Text('UPDATE'),
                     ),
+                    const SizedBox(height: 12),
                     ElevatedButton(
                       onPressed: () => _showDeleteDialog(todoProvider),
                       child: const Text('DELETE'),

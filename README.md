@@ -1,6 +1,6 @@
 Todo_app_using_http
 
-A Flutter application that performs CRUD operations using **Provider** state management and **HTTP** requests with the DummyJSON API.
+A Flutter application that performs CRUD operations using **Provider state management and **HTTP** requests with the DummyJSON API.
 
 Name= Yeshak Tsegaye
 
@@ -36,11 +36,6 @@ DELETE
 Loading
 ![Loading](screenshots/loading.png)
 
-Tech Stack
-
-- State Management: Provider  
-- Networking: http package  
-- API: https://dummyjson.com/todos
 
 
 Project Structure

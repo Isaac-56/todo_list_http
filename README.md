@@ -1,17 +1,67 @@
-# http_assignment
+Todo_app_using_http
 
-A new Flutter project.
+A Flutter application that performs CRUD operations using **Provider** state management and **HTTP** requests with the DummyJSON API.
 
-## Getting Started
+Name= Yeshak Tsegaye
 
-This project is a starting point for a Flutter application.
+ID= UGR/0585/16
 
-A few resources to get you started if this is your first Flutter project:
 
-- [Learn Flutter](https://docs.flutter.dev/get-started/learn-flutter)
-- [Write your first Flutter app](https://docs.flutter.dev/get-started/codelab)
-- [Flutter learning resources](https://docs.flutter.dev/reference/learning-resources)
+Features
 
-For help getting started with Flutter development, view the
-[online documentation](https://docs.flutter.dev/), which offers tutorials,
-samples, guidance on mobile development, and a full API reference.
+- Create new todos
+- Read / view all todos (limit 5)
+- Update todo title and completed status
+- Delete todos
+- Loading text indicator
+- Error handling with messages
+
+Screenshots
+
+GET ALL
+![GET ALL](screenshots/get_all.png)
+
+GET SINGLE
+![GET SINGLE](screenshots/get_single.png)
+
+CREATE
+![CREATE](screenshots/create_new.png)
+
+UPDATE
+![UPDATE](screenshots/update.png)
+
+DELETE
+![DELETE](screenshots/delete.png)
+
+Loading
+![Loading](screenshots/loading.png)
+
+Tech Stack
+
+- State Management: Provider  
+- Networking: http package  
+- API: https://dummyjson.com/todos
+
+
+Project Structure
+
+lib/
+├── models/
+│ └── todo.dart
+├── providers/
+│ └── todo_provider.dart
+├── screens/
+│ └── home_screen.dart
+├── services/
+│ └── api_service.dart
+└── main.dart
+
+
+Requirements Fulfilled
+
+- Provider for state management  
+- http for network requests  
+- Clean project structure  
+- Full CRUD operations  
+- Loading states (text indicator)  
+- Error handling
